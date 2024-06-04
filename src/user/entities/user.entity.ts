@@ -15,6 +15,6 @@ export class User {
   @Column()
   userName: string;
 
-  @OneToMany(() => Comment, (comment) => comment.author)
+  @OneToMany(() => Comment, (comment) => comment.userName)
   comments: Comment[];
 }

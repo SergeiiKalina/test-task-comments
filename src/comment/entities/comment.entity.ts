@@ -1,4 +1,3 @@
-import { User } from '../../user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -6,31 +5,33 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
 export class Comment {
-  @PrimaryGeneratedColumn({ name: 'commentId' })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
   text: string;
 
-  @ManyToOne(() => User, (user) => user.comments)
-  @JoinColumn({ name: 'authorId' })
-  author: User;
+  @Column()
+  userName: string;
 
-  @ManyToOne(() => Comment, (comment) => comment.children, {
+  @ManyToOne(() => Comment, (comment) => comment.answers, {
     onDelete: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn({ name: 'parentId' })
   parent: Comment;
 
   @OneToMany(() => Comment, (comment) => comment.parent)
-  children: Comment[];
+  answers: Comment[];
+
+  @Column()
+  file: string;
 
   @CreateDateColumn()
   createdAt: Date;

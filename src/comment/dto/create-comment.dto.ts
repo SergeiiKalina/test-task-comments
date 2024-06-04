@@ -1,13 +1,14 @@
-import { IsNotEmpty, IsString } from 'class-validator';
-import { User } from 'src/user/entities/user.entity';
-import { Comment } from '../entities/comment.entity';
+import { IsOptional, IsString, IsInt, IsEmail } from 'class-validator';
 
 export class CreateCommentDto {
-  @IsNotEmpty()
-  author: User;
   @IsString()
-  @IsNotEmpty()
   text: string;
-
-  parent: Comment | null;
+  @IsString()
+  userName: string;
+  @IsEmail()
+  email: string;
+  @IsOptional()
+  parent: number | null;
+  @IsString()
+  homePage: string;
 }

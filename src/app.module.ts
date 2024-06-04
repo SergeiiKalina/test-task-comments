@@ -8,10 +8,28 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha';
 import { UserModule } from './user/user.module';
 import { User } from './user/entities/user.entity';
+import { BullModule } from '@nestjs/bull';
+import { QueueModule } from './queue/queue.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CacheModule } from '@nestjs/cache-manager';
+
+import { redisStore } from 'cache-manager-redis-yet';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useFactory: async () => ({
+        store: await redisStore({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        }),
+      }),
+    }),
+    EventEmitterModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [],
       useFactory: (ConfigService: ConfigService) => ({
@@ -39,8 +57,16 @@ import { User } from './user/entities/user.entity';
         };
       },
     }),
+
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     CommentModule,
     UserModule,
+    QueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "test-arena-gym",
+  "private_key_id": "d2e2db56833339949955b3c27f6bbcadc1d9b00a",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCuSw5Gx2sxwWER\nXDu+POljSKv/Xe6sF2JQrcSE8DpY6Sc3g+KLFzj1D4AMbED1iQL2Uv1vd3DS3XQB\n3BQC1h/UIr+lRYg8ghxpl0oV37CCZ2s1uJ2JyKTwhr50bjX1m++s7FupddqLyhSl\nPwVRah7uiGt/nyvjnnUIrfaq0wXS6s7l05hOz37IBJRAdpaEPxp8FVi3xLMpCIob\n4+UEoS43B1arHlgq0ZjcYE+mLUYv0guWsxDGRMiZpMy1C98GjNsNAzvC5AE9FoqQ\nduboWx14/k71Fn7TgnCHj21GLxcafmPzDk8ihsvSAIUL64xPXlcutGJTDqvZTVZ5\nt0OxuqjzAgMBAAECggEAJJKrVD7UR4SEkdgA0VKGxsahENztED936eYMrriaBb4m\n9IdAKl+dHA88l16/4sX1USro81Lk4dqGVT2RFWdJFoKUJGIKzGeg/qc4bI6bw0Fg\nRc2PgTIRKkeb/2KBACDQkkCmm1CXo22sF2C6BPN3uiX2KLmFxCWj+UZH1GCjgDZc\nksL7/aBhROY/+APTqlXuuwp1TARgkqQFGZg0DXgk0c0enxTe8+x03uHZFxeBKbjC\ncLz+jiovBsgt5BH6UOHKeXI1AKgw0qz9dwBTePIyrnDxohEMx2vlKlswhbGuL3Tv\nGYdWXxJCmNaSHT1RW4P+5ogYi9DRPPdx2581KB9tgQKBgQDgoFD7Gzs03Klyqk2q\nuvjX9avJmese3iUJObIG6Z79rh0rrydC+/fYz8Zkh2MGqP9tOGoy4GfZJ+VUmMgl\nZkBxD6iM7rcj2NXlsNBnZPu/JoBtzdBN2xIgcO9lBVmF40LdzgDFisPBGPJQEZPb\naxodKfN+zO/+myBPXE8YesBXiQKBgQDGowrnDmp2M0uNcI92BY8QUdHyxmaGT93Z\nY4LG6q3bKk/f/1NNnD8A6vfjzjYQcaPHcYGesgYXMGKaSKVy+6lHrUuFhgrh9HOS\nx5DbrF60iYaqJP2JuGORpbv58KwYHpoeE1wrzOp5wykbcOV+F9fp/9uQM+N1vE03\nm2BpB9UhmwKBgAgjBovyEpT5oVG8BZA3safxCEYHQ1Mc7O6GnoJNmCrMUdYxRBTT\nF8lMzXz6woWNPaNxNbeeFWTyYwZLeoSQTalKzeo9A3lS83yciRAVwmDMPj68A92u\nH9v4+1MHfJSzBMsQGUsOmcS26KAp4tdB6/I+gMmJFvB8IhF94IecercxAoGAWa26\nel6TyhGWhqDO5CXWVTPbaZQRLYpZSpAWtt+05kHQFf0cCuoDt9JdYEf1OK9VlfG0\n54TQIyABJE6wA52C641dj0bZGvJWS2o2CDdl+nQsjBxvKwJIUbVVjJ4P1EPcqL9s\n2YmGQrrNkEoEEk2JeWe+JPiINNtysSxA9qpGmwkCgYACYVUxjq4eEozOJecIpn0I\nWWaUQZAsDllX15lERb6cH3BaF07g5LaRb+pt2hd4cFIFR6kGg59hQSEc7joPbk7K\n9kOWvB+QRMyE1QYcw/h7OL7HGJVYJ1vAGzVBx71CJ6IIUL8PMbqKKsHHN9dvn98A\nlfrXtIf0Q/4orA/NcPrhtQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "test-arena-gym@appspot.gserviceaccount.com",
+  "client_id": "104566515524249034794",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/test-arena-gym%40appspot.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
