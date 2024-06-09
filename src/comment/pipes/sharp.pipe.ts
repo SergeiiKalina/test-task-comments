@@ -1,4 +1,5 @@
-import { BadRequestException, Injectable, PipeTransform } from '@nestjs/common';
+import { Injectable, PipeTransform } from '@nestjs/common';
+import { WsException } from '@nestjs/websockets';
 import * as sharp from 'sharp';
 
 @Injectable()
@@ -7,12 +8,12 @@ export class SharpPipe
 {
   async transform(file: Express.Multer.File): Promise<Express.Multer.File> {
     if (!file) {
-      throw new BadRequestException('File was not found');
+      throw new WsException('File was not found');
     }
 
     if (file.mimetype.startsWith('image')) {
       if (!file.buffer) {
-        throw new BadRequestException('File is not correct.');
+        throw new WsException('File is not correct.');
       }
 
       const processedBuffer = await sharp(file.buffer)
@@ -33,18 +34,16 @@ export class SharpPipe
       };
     } else if (file.mimetype.startsWith('text')) {
       if (!file.buffer) {
-        throw new BadRequestException('Text file is invalid.');
+        throw new WsException('Text file is invalid.');
       }
 
       if (file.size > 1024 * 100) {
-        throw new BadRequestException(
-          'The text file should not be larger than 100Kb.',
-        );
+        throw new WsException('The text file should not be larger than 100Kb.');
       }
 
       return { ...file, originalname: Date.now().toString() + '.txt' };
     } else {
-      throw new BadRequestException('Unsupported file type');
+      throw new WsException('Unsupported file type');
     }
   }
 }

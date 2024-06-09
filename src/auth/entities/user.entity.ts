@@ -9,12 +9,11 @@ export class User {
   @Column({ nullable: false })
   email: string;
 
-  @Column({ nullable: true })
-  homePage?: string;
-
   @Column()
   userName: string;
+  @Column()
+  homePage: string;
 
-  @OneToMany(() => Comment, (comment) => comment.userName)
+  @OneToMany(() => Comment, (comment) => comment.author)
   comments: Comment[];
 }

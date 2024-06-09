@@ -10,12 +10,20 @@ import {
 import { Server, Socket } from 'socket.io';
 import { CommentService } from './comment.service';
 import { ICreateComment } from './interface/comment.interface';
-import { UseGuards, UseInterceptors } from '@nestjs/common';
-import { RecaptchaGuard } from './guard/captcha.guard';
+import {
+  UseGuards,
+  UseInterceptors,
+  BadRequestException,
+  Inject,
+} from '@nestjs/common';
+import { RecaptchaGuard } from '../auth/guards/captcha.guard';
 import { FileInterceptor } from './interceptors/file.interceptor';
-import { InjectQueue } from '@nestjs/bull';
-import { Queue } from 'bull';
-import { EventEmitter2 } from '@nestjs/event-emitter';
+import { CommentQueueService } from '../queue/queue-comment.service';
+import { WsJwtGuard } from '../auth/guards/jwt.guard';
+import { SortCommentsDto } from './dto/sorted.dto';
+import { Cache } from 'cache-manager';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { CreateCommentDto } from './dto/create-comment.dto';
 
 @WebSocketGateway({ cors: true, maxHttpBufferSize: 1e8 })
 export class CommentGateway
@@ -24,35 +32,85 @@ export class CommentGateway
   @WebSocketServer() server: Server;
   constructor(
     private readonly commentService: CommentService,
-    @InjectQueue('comment') private readonly commentQueue: Queue,
-    private readonly eventEmitter: EventEmitter2,
+    public readonly commentQueueService: CommentQueueService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   async handleConnection(client: Socket) {
     console.log('Client connected:', client.id);
   }
   async handleDisconnect(client: Socket) {
-    console.log('Client disconnected:', client.id);
+    await this.cacheManager.del(`sortParams_${client.id}`);
   }
+
+  @UseGuards(WsJwtGuard)
   @SubscribeMessage('addComments')
   @UseGuards(RecaptchaGuard)
   @UseInterceptors(FileInterceptor)
   async handleAddComment(
-    @ConnectedSocket() client: Socket,
+    @ConnectedSocket() client: any,
     @MessageBody() newComment: ICreateComment,
   ): Promise<void> {
-    const { file, ...restComment } = newComment;
+    try {
+      const { file, ...restComment } = newComment;
 
-    const job = await this.commentQueue.add({
-      newComment: restComment,
-      file,
-    });
-    await job.finished();
-    await this.eventEmitter.emit('commentAdded', this.server);
+      const user = client.user;
+      if (!user) {
+        if (restComment.email && restComment.userName) {
+          let createCommentObject = {
+            ...restComment,
+            userName: restComment.userName,
+            email: restComment.email,
+            authorId: null,
+          };
+          await this.commentQueueService.createComment(
+            createCommentObject,
+            file,
+            this.server,
+            client.id,
+          );
+        }
+      }
+
+      let createCommentObject = {
+        ...restComment,
+        userName: user.userName,
+        email: user.email,
+        authorId: user.id,
+      };
+
+      await this.commentQueueService.createComment(
+        createCommentObject,
+        file,
+        this.server,
+        client.id,
+      );
+    } catch (error) {
+      client.emit('exception', {
+        status: error.status,
+        message: error.message,
+      });
+    }
   }
 
-  @SubscribeMessage('getAllComments')
+  @SubscribeMessage('getSortedComments')
+  async handleGetSortedComments(
+    @MessageBody() sortDto: SortCommentsDto,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    await this.commentQueueService.sortedComments(
+      sortDto,
+      client.id,
+      this.server,
+    );
+  }
+
+  @SubscribeMessage('getFirstPage')
   async handleGetAllComments(client: Socket): Promise<void> {
-    const comments = await this.commentService.getAllComments();
-    client.emit('comments', comments);
+    const comments = await this.commentService.getSortedComments(
+      { field: 'createdAt', order: 'DESC', page: 1 },
+      client.id,
+    );
+
+    client.emit('getFirstPage', comments);
   }
 }

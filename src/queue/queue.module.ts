@@ -5,13 +5,15 @@ import { CommentQueueService } from './queue-comment.service';
 import { CommentService } from 'src/comment/comment.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Comment } from 'src/comment/entities/comment.entity';
-import { FileService } from 'src/comment/file.service';
+import { FileService } from 'src/comment/file/file.service';
 import { SharpPipe } from 'src/comment/pipes/sharp.pipe';
 import { ValidateTagsHTML } from 'src/comment/pipes/validate-html.pipe';
+import { User } from 'src/auth/entities/user.entity';
+import { CacheService } from 'src/comment/cache/cache.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Comment]),
+    TypeOrmModule.forFeature([Comment, User]),
     BullModule.forRoot({
       redis: {
         host: 'localhost',
@@ -29,6 +31,7 @@ import { ValidateTagsHTML } from 'src/comment/pipes/validate-html.pipe';
     FileService,
     SharpPipe,
     ValidateTagsHTML,
+    CacheService,
   ],
   exports: [BullModule],
 })

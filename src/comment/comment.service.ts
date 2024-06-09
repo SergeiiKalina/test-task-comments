@@ -1,32 +1,43 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
 import { Comment } from './entities/comment.entity';
-import { FileService } from './file.service';
+import { FileService } from './file/file.service';
 import { ValidateTagsHTML } from './pipes/validate-html.pipe';
-import { Cache } from 'cache-manager';
-import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { SortCommentsDto } from './dto/sorted.dto';
+import { User } from '../auth/entities/user.entity';
+import { CacheService } from './cache/cache.service';
 
 @Injectable()
 export class CommentService {
   constructor(
     @InjectRepository(Comment)
     private readonly commentRepository: Repository<Comment>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
     private readonly fileService: FileService,
     private readonly validationHTML: ValidateTagsHTML,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly cacheService: CacheService,
   ) {}
-  async create(createCommentDto: CreateCommentDto, file: Express.Multer.File) {
+  async create(
+    createCommentDto: CreateCommentDto,
+    file: Express.Multer.File | null,
+  ) {
+    const author = await this.userRepository.findOne({
+      where: { id: createCommentDto.authorId },
+    });
+
+    if (!author) {
+      throw new BadRequestException('Author not found');
+    }
     let parent: Comment = null;
     if (createCommentDto.parent) {
       parent = await this.commentRepository.findOne({
         where: { id: createCommentDto.parent },
       });
       if (!parent) {
-        throw new NotFoundException(
-          `Parent comment with id ${createCommentDto.parent} not found`,
-        );
+        throw new BadRequestException('Parent not found');
       }
     }
 
@@ -34,51 +45,96 @@ export class CommentService {
       createCommentDto.text,
     );
 
-    const urlFile = await this.fileService.uploadFile(file);
-
-    const newComment = this.commentRepository.create({
+    const newComment = await this.commentRepository.create({
       ...createCommentDto,
       text: processedText,
+      author,
       parent,
-      file: urlFile,
+      file: file ? await this.fileService.uploadFile(file) : null,
     });
 
     const savedComment = await this.commentRepository.save(newComment);
-
     return savedComment;
   }
 
-  async getAllComments() {
-    const cacheComments = await this.cacheManager.get('allComment');
+  async getSortedComments(
+    sortDto: SortCommentsDto = { field: 'createdAt', order: 'DESC', page: 1 },
+    clientId: string,
+  ) {
+    const validationCache = await this.cacheService.validationSortParams(
+      sortDto,
+      clientId,
+    );
 
-    if (!cacheComments) {
-      const comments = await this.commentRepository.find({
-        relations: ['parent'],
-        order: {
-          createdAt: 'DESC',
-        },
-      });
-      const commentMap = new Map<number, Comment>();
-      comments.forEach((comment) => {
-        comment.answers = [];
-        commentMap.set(comment.id, comment);
-      });
-
-      const rootComments: Comment[] = [];
-
-      comments.forEach((comment) => {
-        if (comment.parent) {
-          const parent = commentMap.get(comment.parent.id);
-          if (parent && parent.id !== comment.id) {
-            parent.answers.push(comment);
-          }
-        } else {
-          rootComments.push(comment);
-        }
-      });
-      await this.cacheManager.set('allComment', rootComments);
-      return rootComments;
+    if (!validationCache) {
+      await this.cacheService.cacheSortParams(sortDto, clientId);
     }
-    return cacheComments;
+
+    const { field, order, page } = sortDto;
+
+    const [mainComments, total] = await this.commentRepository.findAndCount({
+      where: { parent: IsNull() },
+      order: { [field]: order },
+      skip: (page - 1) * 25,
+      take: 25,
+      relations: ['parent', 'answers', 'author'],
+    });
+
+    await this.returnAllNestedComments(mainComments);
+
+    return { comments: mainComments, total };
+  }
+
+  async returnAllNestedComments(comments: Comment[]) {
+    const commentMap = new Map<number, Comment>();
+    comments.forEach((comment) => commentMap.set(comment.id, comment));
+
+    const getAnswers = async (parentComment: Comment) => {
+      const childComments = await this.commentRepository.find({
+        where: { parent: { id: parentComment.id } },
+        relations: ['parent', 'author'],
+        order: { createdAt: 'DESC' },
+      });
+
+      if (childComments.length > 0) {
+        parentComment.answers = childComments;
+        for (const child of childComments) {
+          await getAnswers(child);
+        }
+      }
+    };
+
+    for (const comment of comments) {
+      await getAnswers(comment);
+    }
+  }
+
+  async getAllComments() {
+    const comments = await this.commentRepository.find({
+      relations: ['parent'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const commentMap = new Map<number, Comment>();
+    comments.forEach((comment) => {
+      comment.answers = [];
+      commentMap.set(comment.id, comment);
+    });
+
+    const rootComments: Comment[] = [];
+
+    comments.forEach((comment) => {
+      if (comment.parent) {
+        const parent = commentMap.get(comment.parent.id);
+        if (parent && parent.id !== comment.id) {
+          parent.answers.push(comment);
+        }
+      } else {
+        rootComments.push(comment);
+      }
+    });
+
+    return rootComments;
   }
 }

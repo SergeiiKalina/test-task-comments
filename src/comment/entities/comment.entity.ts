@@ -1,3 +1,4 @@
+import { User } from '../../auth/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
@@ -20,6 +21,12 @@ export class Comment {
   @Column()
   userName: string;
 
+  @ManyToOne(() => User, (user) => user.comments, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'authorId' })
+  author: User;
+
   @ManyToOne(() => Comment, (comment) => comment.answers, {
     onDelete: 'CASCADE',
     nullable: true,
@@ -30,8 +37,14 @@ export class Comment {
   @OneToMany(() => Comment, (comment) => comment.parent)
   answers: Comment[];
 
+  @Column({ nullable: true })
+  file: string | null;
+
   @Column()
-  file: string;
+  email: string;
+
+  @Column()
+  homePage: string;
 
   @CreateDateColumn()
   createdAt: Date;

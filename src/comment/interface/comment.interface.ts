@@ -1,13 +1,13 @@
 export interface ICreateComment {
   text: string;
 
-  userName: string;
-
-  email: string;
-
   parent: number | null;
 
+  userName: string;
+
   homePage: string;
+  authorId: number;
+  email: string;
 
   file: any;
 }

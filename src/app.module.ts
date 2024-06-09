@@ -6,30 +6,28 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Comment } from './comment/entities/comment.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha';
-import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { User } from './auth/entities/user.entity';
 import { BullModule } from '@nestjs/bull';
 import { QueueModule } from './queue/queue.module';
-import { EventEmitterModule } from '@nestjs/event-emitter';
+import { EventEmitterModule, EventEmitter2 } from '@nestjs/event-emitter';
 import { CacheModule } from '@nestjs/cache-manager';
-
-import { redisStore } from 'cache-manager-redis-yet';
+import * as redisStore from 'cache-manager-redis-store';
+import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    CacheModule.registerAsync({
+    CacheModule.register({
       isGlobal: true,
-      useFactory: async () => ({
-        store: await redisStore({
-          socket: {
-            host: 'localhost',
-            port: 6379,
-          },
-        }),
-      }),
+      store: redisStore,
+      host: 'localhost',
+      port: 6379,
     }),
-    EventEmitterModule.forRoot(),
+    EventEmitterModule.forRoot({
+      maxListeners: 1000,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [],
       useFactory: (ConfigService: ConfigService) => ({
@@ -64,11 +62,29 @@ import { redisStore } from 'cache-manager-redis-yet';
         port: 6379,
       },
     }),
+
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          secret: config.get<string>('JWT_SECRET'),
+          signOptions: {
+            expiresIn: '1d',
+          },
+        };
+      },
+    }),
     CommentModule,
-    UserModule,
+    AuthModule,
     QueueModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private readonly eventEmitter: EventEmitter2) {
+    this.eventEmitter.setMaxListeners(100);
+  }
+}

@@ -3,7 +3,6 @@ import {
   ExecutionContext,
   Injectable,
   NestInterceptor,
-  BadRequestException,
 } from '@nestjs/common';
 import { map } from 'rxjs/operators';
 import { SharpPipe } from '../pipes/sharp.pipe';
@@ -16,7 +15,11 @@ export class FileInterceptor implements NestInterceptor<any, any> {
     const data = context.switchToWs().getData();
 
     if (!data.file) {
-      throw new BadRequestException('File is required');
+      return next.handle().pipe(
+        map((result) => {
+          return { ...result, file: null };
+        }),
+      );
     }
 
     const file = data.file;
