@@ -16,7 +16,7 @@ import { CacheService } from 'src/comment/cache/cache.service';
     TypeOrmModule.forFeature([Comment, User]),
     BullModule.forRoot({
       redis: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
       },
     }),

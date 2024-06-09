@@ -22,7 +22,7 @@ import { JwtModule } from '@nestjs/jwt';
     CacheModule.register({
       isGlobal: true,
       store: redisStore,
-      host: 'localhost',
+      host: 'redis',
       port: 6379,
     }),
     EventEmitterModule.forRoot({
@@ -32,12 +32,13 @@ import { JwtModule } from '@nestjs/jwt';
       imports: [],
       useFactory: (ConfigService: ConfigService) => ({
         type: 'postgres',
-        host: ConfigService.get('DB_HOST'),
-        port: ConfigService.get('DB_PORT'),
-        username: ConfigService.get('DB_USER_NAME'),
-        password: ConfigService.get('DB_PASSWORD'),
-        database: ConfigService.get('DB_DATA_BASE '),
+        host: ConfigService.get('PG_HOST'),
+        port: ConfigService.get('PG_PORT'),
+        username: ConfigService.get('POSTGRES_USER'),
+        password: ConfigService.get('POSTGRES_PASSWORD'),
+        database: ConfigService.get('POSTGRES_DB'),
         entities: [Comment, User],
+
         synchronize: true,
       }),
       inject: [ConfigService],
@@ -58,7 +59,7 @@ import { JwtModule } from '@nestjs/jwt';
 
     BullModule.forRoot({
       redis: {
-        host: 'localhost',
+        host: 'redis',
         port: 6379,
       },
     }),

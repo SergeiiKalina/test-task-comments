@@ -21,7 +21,7 @@ export class FileService {
     const tempFilePath = tmp.tmpNameSync();
     fs.writeFileSync(tempFilePath, fileBuffer);
 
-    const result = await bucket.upload(tempFilePath, {
+    await bucket.upload(tempFilePath, {
       destination: originalName,
       public: true,
     });

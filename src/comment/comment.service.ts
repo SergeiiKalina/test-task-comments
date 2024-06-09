@@ -54,6 +54,7 @@ export class CommentService {
     });
 
     const savedComment = await this.commentRepository.save(newComment);
+
     return savedComment;
   }
 
