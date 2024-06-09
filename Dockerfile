@@ -13,6 +13,8 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY . .
 
+EXPOSE 8080
+
 # Build the application (if needed)
 RUN npm run build
 
