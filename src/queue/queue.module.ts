@@ -10,15 +10,20 @@ import { SharpPipe } from 'src/comment/pipes/sharp.pipe';
 import { ValidateTagsHTML } from 'src/comment/pipes/validate-html.pipe';
 import { User } from 'src/auth/entities/user.entity';
 import { CacheService } from 'src/comment/cache/cache.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Comment, User]),
-    BullModule.forRoot({
-      redis: {
-        host: 'redis',
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_HOST'),
+          port: parseInt(configService.get('REDIS_PORT'), 10),
+        },
+      }),
+      inject: [ConfigService],
     }),
     BullModule.registerQueue({
       name: 'comment',

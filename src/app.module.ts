@@ -19,11 +19,15 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    CacheModule.register({
+    CacheModule.registerAsync({
       isGlobal: true,
-      store: redisStore,
-      host: 'redis',
-      port: 6379,
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        store: redisStore,
+        host: configService.get('REDIS_HOST'),
+        port: configService.get('REDIS_PORT'),
+      }),
+      inject: [ConfigService],
     }),
     EventEmitterModule.forRoot({
       maxListeners: 1000,
@@ -57,11 +61,15 @@ import { JwtModule } from '@nestjs/jwt';
       },
     }),
 
-    BullModule.forRoot({
-      redis: {
-        host: 'redis',
-        port: 6379,
-      },
+    BullModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        redis: {
+          host: configService.get('REDIS_HOST'),
+          port: parseInt(configService.get('REDIS_PORT'), 10),
+        },
+      }),
+      inject: [ConfigService],
     }),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),

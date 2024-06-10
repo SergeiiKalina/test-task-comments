@@ -17,7 +17,7 @@ services:
       - PG_PORT=5432
       - GOOGLE_RECAPTCHA_SECRET_KEY=6LfBauspAAAAALRPAwnqea2ckVmVxTuEEbj1Qfnf
       - JWT_SECRET=secret
-      - REDIS_HOST=localhost
+      - REDIS_HOST=redis
       - REDIS_PORT=6379
     networks:
       - backend_network
@@ -34,7 +34,7 @@ services:
     image: redis
     environment:
       - REDIS_PORT=6379
-      - REDIS_HOST=localhost
+      - REDIS_HOST=redis
     ports:
       - 6379:6379
     networks:
