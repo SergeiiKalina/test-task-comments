@@ -24,14 +24,14 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    restart: unless-stopped
+    restart: always
     depends_on:
       - postgres
       - redis
 
   redis:
     container_name: redis-db
-    image: redis
+    image: redis:latest
     environment:
       - REDIS_PORT=6379
       - REDIS_HOST=redis
@@ -39,7 +39,7 @@ services:
       - 6379:6379
     networks:
       - backend_network
-    restart: unless-stopped
+    restart: always
     volumes:
       - redis:/data
 
