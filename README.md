@@ -11,140 +11,53 @@ Before starting, make sure you have at least those components on your workstatio
 
 To clone the repository, run the following command:
 
-```html
-<pre>
-<code>
+```json
 git clone https://github.com/SergeiiKalina/test-task-comments my-project
-</code>
-<button onclick="copyToClipboard('git clone https://github.com/SergeiiKalina/test-task-comments my-project')">Copy</button>
-</pre>
-<script>
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(
-      function () {
-        console.log('Copied to clipboard');
-      },
-      function (err) {
-        console.error('Could not copy text: ', err);
-      },
-    );
-  }
-</script>
 ```
 
-```html
-<pre>
-<code>
+# then
+
+```json
+
 npm install
-</code>
-<button onclick="copyToClipboard('npm install')">Copy</button>
-</pre>
-<script>
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(
-      function () {
-        console.log('Copied to clipboard');
-      },
-      function (err) {
-        console.error('Could not copy text: ', err);
-      },
-    );
-  }
-</script>
+
 ```
 
 ### Launch and discover.
 
 You are now ready to launch the our application with docker-compose.yml using the command below.
 
-```html
-<pre>
-<code>
+```json
+
 docker-compose up
-</code>
-<button onclick="copyToClipboard('docker-compose up')">Copy</button>
-</pre>
-<script>
-  function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(
-      function () {
-        console.log('Copied to clipboard');
-      },
-      function (err) {
-        console.error('Could not copy text: ', err);
-      },
-    );
-  }
-</script>
+
 ```
 
 # Since there was no swagger documentation in the requirements I will describe the endpoints here.
 
 # Registration
 
-```html
-<p>POST /auth</p>
-<p>Example request:</p>
-<pre>
-<code>
+```json
+POST /auth
+
 {
   "email": "example@example.com",
   "userName": "Name",
   "homePage": "https://example.com" (optional field)
 }
-</code>
-<button onclick="copyToClipboard('{
-  "email": "example@example.com",
-  "userName": "Name",
-  "homePage": "https://example.com"
-}')">Copy</button>
-</pre>
-<p>Example response:</p>
-<pre>
-<code>
-{
-  "id": "12345",
-  "email": "example@example.com",
-  "userName": "Name",
-  "homePage": "https://example.com",
-  "token": "jwt-token-here"
-}
-</code>
-</pre>
-<script>
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(
-    function () {
-      console.log('Copied to clipboard');
-    },
-    function (err) {
-      console.error('Could not copy text: ', err);
-    }
-  );
-}
-</script>
+
 ```
 
 # Login
 
-```html
-<p>POST /auth/login</p>
-<p>Example request:</p>
-<pre>
-<code>
+```json
+POST /auth/login
+
 {
   "email": "example@example.com",
   "userName": "Name",
 }
-</code>
-<button onclick="copyToClipboard('{
-  "email": "example@example.com",
-  "userName": "Name",
-}')">Copy</button>
-</pre>
-<p>Example response:</p>
-<pre>
-<code>
+Example request:
 {
   "id": "12345",
   "email": "example@example.com",
@@ -152,20 +65,7 @@ function copyToClipboard(text) {
   "homePage": "https://example.com",
   "token": "jwt-token-here"
 }
-</code>
-</pre>
-<script>
-function copyToClipboard(text) {
-  navigator.clipboard.writeText(text).then(
-    function () {
-      console.log('Copied to clipboard');
-    },
-    function (err) {
-      console.error('Could not copy text: ', err);
-    }
-  );
-}
-</script>
+
 
 ```
 
@@ -239,6 +139,7 @@ When a client disconnects, the server will remove any cached sort parameters ass
 
 # Project structure
 
+```json
 src/
 ├── auth
 │ ├── auth.module.ts
@@ -248,7 +149,7 @@ src/
 | | └── createUser.dto.ts
 │ ├── entities/
 | | └── user.entity.ts
-│ ├── guards/  
+│ ├── guards/
 | | └── captcha.guard.ts
 | | └── jwt.guard.ts
 ├── comment
@@ -264,13 +165,13 @@ src/
 | | └── sorted.dto.ts
 │ ├── entities/
 | | └── comment.entity.ts
-│ ├── file/  
+│ ├── file/
 | | └── file.service.ts
-│ ├── interceptors/  
+│ ├── interceptors/
 | | └── file.interceptor.ts
-│ ├── interface/  
+│ ├── interface/
 | | └── comment.interface.ts
-│ ├── pipes/  
+│ ├── pipes/
 | | └── sharp.pipe.ts
 | | └── validate-html.pipe.ts
 ├── queue
@@ -281,6 +182,7 @@ src/
 ├──app.module.ts
 ├──app.service.ts
 └── main.ts
+```
 
 # Project goals
 
