@@ -12,7 +12,7 @@ Before starting, make sure you have at least those components on your workstatio
 To clone the repository, run the following command:
 
 ```json
-git clone https://github.com/SergeiiKalina/test-task-comments my-project
+git clone https://github.com/SergeiiKalina/test-task-comments .
 ```
 
 # then
