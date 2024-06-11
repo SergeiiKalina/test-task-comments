@@ -85,6 +85,12 @@ Clients can connect to the WebSocket gateway using a WebSocket client. Upon succ
 
 When a client disconnects, the server will remove any cached sort parameters associated with the client.
 
+#### Exception
+
+**Event:** `exception`
+
+**Description:** Return all exception in project
+
 ### Events and Payloads
 
 #### Get First Page
