@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 import * as tmp from 'tmp';
 import * as fs from 'fs';
 
-const serviceAccountKey = require('../../../test-arena-gym-d2e2db568333.json');
+const serviceAccountKey = require('../../../test-task-comment-d2e2db568333.json');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccountKey),
   storageBucket: 'gs://test-arena-gym.appspot.com',

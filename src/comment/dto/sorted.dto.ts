@@ -3,6 +3,7 @@ import { IsInt, IsOptional, IsString, IsIn, Min } from 'class-validator';
 export class SortCommentsDto {
   @IsString()
   @IsOptional()
+  @IsIn(['createdAt', 'email', 'userName'])
   field: string = 'createdAt';
 
   @IsString()

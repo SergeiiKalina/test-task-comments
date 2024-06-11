@@ -1,73 +1,317 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Getting started
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Before starting, make sure you have at least those components on your workstation:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- An up-to-date release of NodeJS such as 20.x and NPM
+- A database such as PostgreSQL. You may use the provided docker-compose.yml file.
 
-## Description
+<a href="https://www.docker.com/">Docker</a> may also be useful for advanced testing and image building, although it is not required for development.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Project Configuration
 
-## Installation
+To clone the repository, run the following command:
 
-```bash
-$ npm install
+```html
+<pre>
+<code>
+git clone https://github.com/SergeiiKalina/test-task-comments my-project
+</code>
+<button onclick="copyToClipboard('git clone https://github.com/SergeiiKalina/test-task-comments my-project')">Copy</button>
+</pre>
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(
+      function () {
+        console.log('Copied to clipboard');
+      },
+      function (err) {
+        console.error('Could not copy text: ', err);
+      },
+    );
+  }
+</script>
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```html
+<pre>
+<code>
+npm install
+</code>
+<button onclick="copyToClipboard('npm install')">Copy</button>
+</pre>
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(
+      function () {
+        console.log('Copied to clipboard');
+      },
+      function (err) {
+        console.error('Could not copy text: ', err);
+      },
+    );
+  }
+</script>
 ```
 
-## Test
+### Launch and discover.
 
-```bash
-# unit tests
-$ npm run test
+You are now ready to launch the our application with docker-compose.yml using the command below.
 
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+```html
+<pre>
+<code>
+docker-compose up
+</code>
+<button onclick="copyToClipboard('docker-compose up')">Copy</button>
+</pre>
+<script>
+  function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(
+      function () {
+        console.log('Copied to clipboard');
+      },
+      function (err) {
+        console.error('Could not copy text: ', err);
+      },
+    );
+  }
+</script>
 ```
 
-## Support
+# Since there was no swagger documentation in the requirements I will describe the endpoints here.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Registration
 
-## Stay in touch
+```html
+<p>POST /auth</p>
+<p>Example request:</p>
+<pre>
+<code>
+{
+  "email": "example@example.com",
+  "userName": "Name",
+  "homePage": "https://example.com" (optional field)
+}
+</code>
+<button onclick="copyToClipboard('{
+  "email": "example@example.com",
+  "userName": "Name",
+  "homePage": "https://example.com"
+}')">Copy</button>
+</pre>
+<p>Example response:</p>
+<pre>
+<code>
+{
+  "id": "12345",
+  "email": "example@example.com",
+  "userName": "Name",
+  "homePage": "https://example.com",
+  "token": "jwt-token-here"
+}
+</code>
+</pre>
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(
+    function () {
+      console.log('Copied to clipboard');
+    },
+    function (err) {
+      console.error('Could not copy text: ', err);
+    }
+  );
+}
+</script>
+```
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+# Login
 
-## License
+```html
+<p>POST /auth/login</p>
+<p>Example request:</p>
+<pre>
+<code>
+{
+  "email": "example@example.com",
+  "userName": "Name",
+}
+</code>
+<button onclick="copyToClipboard('{
+  "email": "example@example.com",
+  "userName": "Name",
+}')">Copy</button>
+</pre>
+<p>Example response:</p>
+<pre>
+<code>
+{
+  "id": "12345",
+  "email": "example@example.com",
+  "userName": "Name",
+  "homePage": "https://example.com",
+  "token": "jwt-token-here"
+}
+</code>
+</pre>
+<script>
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(
+    function () {
+      console.log('Copied to clipboard');
+    },
+    function (err) {
+      console.error('Could not copy text: ', err);
+    }
+  );
+}
+</script>
 
-Nest is [MIT licensed](LICENSE).
+```
+
+## WebSocket API
+
+### Gateway Overview
+
+This project includes a WebSocket gateway that handles real-time communication for comments. The gateway is set up to handle connections, disconnections, and specific events such as adding comments and retrieving sorted comments.
+
+### WebSocket Events
+
+#### Connection
+
+Clients can connect to the WebSocket gateway using a WebSocket client. Upon successful connection, a message will be logged on the server.
+
+#### Disconnection
+
+When a client disconnects, the server will remove any cached sort parameters associated with the client.
+
+### Events and Payloads
+
+#### Get First Page
+
+**Event:** `getFirstPage`
+
+**Description:** Return last 25 comments
+
+#### Add Comments
+
+**Event:** `addComments`
+
+**Description:** This event is used to add a new comment. It uses JWT and ReCAPTCHA for security and handles file uploads. The field can include html tags (a, code, i, strong), but all other tags will be removed. Pictures will be cut to 320x240 size and .txt files > 100kb will give an error.
+
+**Payload:**
+
+```json
+{
+  "text": "This is a comment can include text or html tags such us (<a href=”” title=””> </a> <code> </code> <i> </i> <strong> </strong>
+)",
+"parent": "id or null  (if null this will be main comments and if this will be id another comment this will be answer)",
+  "file": "<file>" "(picture(size not limited) or txt file (size limited to 100kb))",
+  "recaptcha": "token"
+}
+```
+
+**Payload Authorization**
+
+```json
+{
+  "extraHeaders": {
+    "Authorization": "Bearer token"
+  }
+}
+```
+
+#### Get Sorted Comments
+
+**Event:** `getSortedComments`
+
+**Description:** This event is used to sort comments there is no protection here JWT and ReCAPTCHA
+
+**Payload:**
+
+```json
+{
+  "field": "the field by which the sorting will be done ('createdAt', 'email', 'userName')",
+  "order": "ascending or descending ('ASC', 'DESC')",
+  "page": "page by account"
+}
+```
+
+# Project structure
+
+src/
+├── auth
+│ ├── auth.module.ts
+| ├── auth.controller.ts
+| ├── auth.service.ts
+│ ├── dto/
+| | └── createUser.dto.ts
+│ ├── entities/
+| | └── user.entity.ts
+│ ├── guards/  
+| | └── captcha.guard.ts
+| | └── jwt.guard.ts
+├── comment
+│ ├── comment.module.ts
+| ├── comment.gateway.ts
+| ├── comment.service.ts
+| ├── comment.controller.ts
+| ├── comment-event-handler.ts
+│ ├── cache/
+| | └── cache.service.ts
+│ ├── dto/
+| | └── create-comment.dto.ts
+| | └── sorted.dto.ts
+│ ├── entities/
+| | └── comment.entity.ts
+│ ├── file/  
+| | └── file.service.ts
+│ ├── interceptors/  
+| | └── file.interceptor.ts
+│ ├── interface/  
+| | └── comment.interface.ts
+│ ├── pipes/  
+| | └── sharp.pipe.ts
+| | └── validate-html.pipe.ts
+├── queue
+│ ├── comment.processor.ts
+| ├── queue-comment.service.ts
+| ├── queue.module.ts
+├──app.controller.ts
+├──app.module.ts
+├──app.service.ts
+└── main.ts
+
+# Project goals
+
+## Comment System Project
+
+### General Project Goals
+
+The Comment System project aims to create a functional comment system that allows comments to be consumed, responded to, and interacted with in a time-sensitive manner. The system is designed to be portable to web applications and provides the following educational capabilities:
+
+1. **Comment Creation and Management**
+
+- Users can leave comments on specific topics or posts.
+- Comments can contain text and attached files (images or text files). - Users can reply to existing comments by suggesting a comment tree.
+
+2. **Authentication and Security**
+
+- Support for JWT authentication to protect access to the commenting functionality.
+- Integration with Google ReCAPTCHA to protect against spam and bots.
+- Security measures for file handling to avoid malicious downloads.
+
+3. **Real Time**
+
+- Use of WebSocket to ensure instant comment updates without the need to reload the page.
+- Handle time-based events such as adding new comments and retrieving sorted comments.
+
+4. **Caching and Performance**
+
+- Use cache to optimize performance and reduce server load on repeated requests.
+- Manage sorting parameters and result caching to improve data access speed.
+
+5. **Queues and Asynchronous Processing**
+
+- Integrate with Bull to manage task queues such as comment and file processing.
+- Ensure system reliability and resilience through asynchronous processing.

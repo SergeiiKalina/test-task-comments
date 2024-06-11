@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bull';
-import { CommentProcessor } from './comment.procesor';
+import { CommentProcessor } from './comment.processor';
 import { CommentQueueService } from './queue-comment.service';
 import { CommentService } from 'src/comment/comment.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
