@@ -2,8 +2,8 @@
 
 Before starting, make sure you have at least those components on your workstation:
 
-- An up-to-date release of NodeJS such as 20.x and NPM
-- A database such as PostgreSQL. You may use the provided docker-compose.yml file.
+- An up-to-date release of NodeJS such as 18.x and NPM
+- A database such as PostgreSQL and Redis. You may use the provided docker-compose.yml file.
 
 <a href="https://www.docker.com/">Docker</a> may also be useful for advanced testing and image building, although it is not required for development.
 
