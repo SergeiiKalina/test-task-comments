@@ -54,22 +54,6 @@ export class CommentGateway
       const { file, ...restComment } = newComment;
 
       const user = client.user;
-      if (!user) {
-        if (restComment.email && restComment.userName) {
-          let createCommentObject = {
-            ...restComment,
-            userName: restComment.userName,
-            email: restComment.email,
-            authorId: null,
-          };
-          await this.commentQueueService.createComment(
-            createCommentObject,
-            file,
-            this.server,
-            client.id,
-          );
-        }
-      }
 
       let createCommentObject = {
         ...restComment,
