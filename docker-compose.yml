@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   nest-backend:
     container_name: nest-app
@@ -5,20 +7,18 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    ports:
-      - 8080:8080
     environment:
-      - DB_TYPE=postgres
-      - DB_SCHEMA=public
-      - PG_HOST=postgres
-      - PG_USER=postgres
-      - PG_PASSWORD=12345
-      - PG_DB=postgres
-      - PG_PORT=5432
-      - GOOGLE_RECAPTCHA_SECRET_KEY=6LfBauspAAAAALRPAwnqea2ckVmVxTuEEbj1Qfnf
-      - JWT_SECRET=secret
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
+      - DB_TYPE=${DB_TYPE}
+      - DB_SCHEMA=${DB_SCHEMA}
+      - PG_HOST=${PG_HOST}
+      - PG_USER=${PG_USER}
+      - PG_PASSWORD=${PG_PASSWORD}
+      - PG_DB=${PG_DB}
+      - PG_PORT=${PG_PORT}
+      - GOOGLE_RECAPTCHA_SECRET_KEY=${GOOGLE_RECAPTCHA_SECRET_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
     networks:
       - backend_network
     volumes:
@@ -32,8 +32,6 @@ services:
   redis:
     container_name: redis
     image: redis:latest
-    ports:
-      - 6379:6379
     networks:
       - backend_network
     restart: always
@@ -43,12 +41,10 @@ services:
   postgres:
     container_name: postgres-db
     image: postgres:16
-    ports:
-      - 5432:5432
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
-      - POSTGRES_DB=postgres
+      - POSTGRES_USER=${PG_USER}
+      - POSTGRES_PASSWORD=${PG_PASSWORD}
+      - POSTGRES_DB=${PG_DB}
     networks:
       - backend_network
     restart: unless-stopped

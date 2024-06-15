@@ -38,9 +38,9 @@ import { JwtModule } from '@nestjs/jwt';
         type: 'postgres',
         host: ConfigService.get('PG_HOST'),
         port: ConfigService.get('PG_PORT'),
-        username: ConfigService.get('POSTGRES_USER'),
-        password: ConfigService.get('POSTGRES_PASSWORD'),
-        database: ConfigService.get('POSTGRES_DB'),
+        username: ConfigService.get('PG_USER'),
+        password: ConfigService.get('PG_PASSWORD'),
+        database: ConfigService.get('PG_DB'),
         entities: [Comment, User],
 
         synchronize: true,
